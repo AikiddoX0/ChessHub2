@@ -609,7 +609,7 @@
       </section>
     </main>
   </div>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const revealElements = document.querySelectorAll(".reveal");
   const form = document.getElementById("registration-form");
@@ -691,6 +691,55 @@
         submitButton.disabled = false;
         submitButton.textContent = "Submit Registration";
       }
+    <script>
+  const SUPABASE_URL = "https://supabase.com/dashboard/project/suxxzlbnlhqxnhosrwrl/settings/api-keys/legacy";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1eHh6bGJubGhxeG5ob3Nyd3JsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNDU2MDksImV4cCI6MjA5MTkyMTYwOX0.UzS9qxsDFPq0lCG3Y7EP9XM5IKjmOlu5_5SQiV110_0";
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const form = document.getElementById("registration-form");
+  const successMessage = document.getElementById("success-message");
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    successMessage.classList.remove("is-error", "is-visible");
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Submitting...";
+    }
+
+    const payload = {
+      full_name: form.full_name.value.trim(),
+      whatsapp: form.whatsapp.value.trim(),
+      username: form.username.value.trim(),
+      payment_id: form.payment_id.value.trim(),
+      note: form.note.value.trim(),
+      submitted_at: new Date().toISOString()
+    };
+
+    const { error } = await supabaseClient
+      .from("registrations")
+      .insert([payload]);
+
+    if (error) {
+      successMessage.textContent = error.message;
+      successMessage.classList.add("is-error", "is-visible");
+    } else {
+      successMessage.textContent = "Registration submitted successfully.";
+      successMessage.classList.add("is-visible");
+      form.reset();
+    }
+
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = "Submit Registration";
+    }
+  });
+</script>
+
     }
   });
 </script>
