@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChessHub | Register</title>
+  <meta
+    name="description"
+    content="Register for the ChessHub tournament, complete payment, and submit your details."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <style>
+    :root {
+      --bg: #000000;
+      --bg-soft: #080808;
+      --surface: rgba(255, 255, 255, 0.028);
+      --surface-strong: rgba(255, 255, 255, 0.04);
+      --border: rgba(198, 168, 91, 0.18);
+      --border-soft: rgba(255, 255, 255, 0.08);
+      --text: #f3eee3;
+      --muted: #aca294;
+      --accent: #c6a85b;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.42);
+      --radius-xl: 30px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --max-width: 1140px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      font-family: "Manrope", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(198, 168, 91, 0.08), transparent 24%),
+        linear-gradient(180deg, #080808 0%, #000000 100%);
+    }
+
+    a,
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .page-shell {
+      width: min(calc(100% - 2rem), var(--max-width));
+      margin: 0 auto;
+      padding: 1rem 0 4rem;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.6rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--border-soft);
+      border-radius: 999px;
+      background: rgba(7, 7, 7, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      max-width: min(32vw, 150px);
+    }
+
+    .brand-logo {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .button {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 3.35rem;
+      padding: 0.95rem 1.45rem;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition:
+        transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        border-color 280ms ease,
+        background 280ms ease,
+        box-shadow 280ms ease;
+    }
+
+    .button::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      transform: translateX(-120%);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+      transition: transform 680ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      pointer-events: none;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-2px);
+    }
+
+    .button:hover::after,
+    .button:focus-visible::after {
+      transform: translateX(120%);
+    }
+
+    .button-primary {
+      background: linear-gradient(180deg, #cfb169 0%, #c6a85b 100%);
+      color: #111111;
+      box-shadow: 0 14px 28px rgba(198, 168, 91, 0.16);
+    }
+
+    .button-secondary {
+      border-color: rgba(255, 255, 255, 0.11);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text);
+    }
+
+    .hero,
+    .register-layout {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .hero {
+      padding: 5rem 0 2rem;
+    }
+
+    .hero-copy,
+    .payment-panel,
+    .form-panel {
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.012)),
+        var(--bg-soft);
+      box-shadow: var(--shadow);
+      padding: 1.8rem;
+    }
+
+    .eyebrow,
+    .section-kicker,
+    .mini-label {
+      margin: 0 0 1rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      font-size: 0.66rem;
+      font-weight: 700;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      line-height: 0.94;
+      letter-spacing: 0.015em;
+      text-wrap: balance;
+    }
+
+    h1 {
+      font-size: clamp(2.7rem, 7vw, 5rem);
+      max-width: 11ch;
+    }
+
+    h2 {
+      font-size: clamp(2.1rem, 5vw, 3.5rem);
+      max-width: 12ch;
+    }
+
+    h3 {
+      font-size: clamp(1.45rem, 4vw, 2rem);
+      margin-bottom: 0.8rem;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.85;
+      font-size: 0.98rem;
+    }
+
+    .hero-text {
+      max-width: 56ch;
+      margin-top: 1.35rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      margin-top: 2rem;
+    }
+
+    .register-layout {
+      padding-top: 1rem;
+    }
+
+    .section-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    .price-row,
+    .info-list,
+    .steps {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .price-card,
+    .step-card,
+    .note-box {
+      padding: 1rem 1.1rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .price-amount {
+      color: var(--text);
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1;
+    }
+
+    .qr-wrap {
+      margin-top: 1.2rem;
+      padding: 0.85rem;
+      border: 1px solid rgba(198, 168, 91, 0.16);
+      border-radius: var(--radius-lg);
+      background: #f4efe4;
+    }
+
+    .qr-placeholder {
+      display: block;
+      width: 100%;
+      border-radius: 16px;
+    }
+
+    .upi-box {
+      margin-top: 1rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .upi-box strong {
+      display: block;
+      margin-top: 0.35rem;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .steps {
+      margin-top: 1rem;
+    }
+
+    .step-card span {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .registration-form {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .field {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .field span {
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition:
+        border-color 220ms ease,
+        box-shadow 220ms ease,
+        background 220ms ease,
+        transform 220ms ease;
+    }
+
+    .field textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: #7f786e;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: rgba(198, 168, 91, 0.7);
+      background: var(--surface-strong);
+      box-shadow: 0 0 0 4px rgba(198, 168, 91, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .form-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-top: 0.25rem;
+    }
+
+    .success-message {
+      margin: 0;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(198, 168, 91, 0.2);
+      border-radius: var(--radius-md);
+      background: rgba(198, 168, 91, 0.08);
+      color: #ead9ae;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transform: translateY(8px);
+      transition:
+        opacity 260ms ease,
+        transform 260ms ease,
+        max-height 260ms ease,
+        margin-top 260ms ease;
+    }
+
+    .success-message.is-visible {
+      margin-top: 0.15rem;
+      opacity: 1;
+      max-height: 160px;
+      transform: translateY(0);
+    }
+
+    .success-message.is-error {
+      border-color: rgba(255, 120, 120, 0.24);
+      background: rgba(255, 120, 120, 0.08);
+      color: #ffcbc6;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 800ms ease,
+        transform 800ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition-delay: var(--reveal-delay, 0ms);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (min-width: 760px) {
+      .page-shell {
+        width: min(calc(100% - 3rem), var(--max-width));
+      }
+
+      .hero-actions,
+      .form-actions {
+        flex-direction: row;
+      }
+
+      .register-layout {
+        grid-template-columns: minmax(320px, 0.92fr) minmax(0, 1.08fr);
+        align-items: start;
+      }
+    }
+
+    @media (min-width: 960px) {
+      .hero {
+        grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+        align-items: center;
+        min-height: 52vh;
+      }
+
+      .hero-copy,
+      .payment-panel,
+      .form-panel {
+        padding: 2.2rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .reveal,
+      .button,
+      .button::after,
+      .field input,
+      .field textarea,
+      .success-message {
+        transition: none;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="navbar reveal" data-delay="0">
+      <a class="brand" href="index.html" aria-label="ChessHub home">
+        <img class="brand-logo" src="assset/chesshub-logo.jpg" alt="ChessHub logo">
+      </a>
+      <a class="button button-secondary" href="index.html">Back Home</a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy reveal" data-delay="80">
+          <p class="eyebrow">Register + Payment</p>
+          <h1>Secure your ChessHub tournament seat.</h1>
+          <p class="hero-text">
+            Complete payment, submit your details, and share your screenshot to get
+            access confirmation for the event.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#register-form">Register Now</a>
+            <a
+              class="button button-secondary"
+              href="https://wa.me/919113393929?text=I%20want%20to%20join%20ChessHub"
+              target="_blank"
+              rel="noreferrer"
+            >
+              WhatsApp Support
+            </a>
+          </div>
+        </div>
+
+        <div class="payment-panel reveal" data-delay="160">
+          <div class="section-heading">
+            <p class="section-kicker">Tournament Entry</p>
+            <h2>Payment Details</h2>
+          </div>
+
+          <div class="price-row">
+            <div class="price-card">
+              <p class="mini-label">Entry Fee</p>
+              <div class="price-amount">Rs. 69</div>
+            </div>
+          </div>
+
+          <div class="qr-wrap">
+            <img
+              class="qr-placeholder"
+              src="assset/upi-qr.jpeg"
+              alt="ChessHub UPI QR code for tournament payment"
+            >
+          </div>
+
+          <div class="upi-box">
+            <p class="mini-label">UPI ID</p>
+            <strong id="upi-id">7004601302@upi</strong>
+          </div>
+
+          <div class="steps">
+            <div class="step-card">
+              <span>Step 1</span>
+              <p>Pay the entry fee using QR or UPI.</p>
+            </div>
+            <div class="step-card">
+              <span>Step 2</span>
+              <p>Take a screenshot of your successful payment.</p>
+            </div>
+            <div class="step-card">
+              <span>Step 3</span>
+              <p>Fill the registration form and upload your payment screenshot.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="register-layout">
+        <section class="form-panel reveal" data-delay="220">
+          <div class="section-heading">
+            <p class="section-kicker">Registration Form</p>
+            <h2 id="register-form">Submit Your Details</h2>
+          </div>
+
+          <form class="registration-form" id="registration-form">
+            <label class="field">
+              <span>Full Name</span>
+              <input type="text" name="full_name" placeholder="Enter your full name" required>
+            </label>
+
+            <label class="field">
+              <span>WhatsApp Number</span>
+              <input type="tel" name="whatsapp" placeholder="Enter your WhatsApp number" required>
+            </label>
+
+            <label class="field">
+              <span>Lichess / Chess.com Username</span>
+              <input type="text" name="username" placeholder="Enter your playing username" required>
+            </label>
+
+            <label class="field">
+              <span>Payment Transaction ID</span>
+              <input type="text" name="payment_id" placeholder="Enter your transaction ID" required>
+            </label>
+
+            <label class="field">
+              <span>Payment Screenshot</span>
+              <input type="file" name="screenshot" accept="image/*" required>
+            </label>
+
+            <label class="field">
+              <span>Extra Note</span>
+              <textarea name="note" placeholder="Optional note or payment details"></textarea>
+            </label>
+
+            <div class="form-actions">
+              <button type="submit" class="button button-primary">Submit Registration</button>
+              <a
+                class="button button-secondary"
+                href="https://wa.me/919113393929?text=I%20have%20submitted%20my%20ChessHub%20registration%20form"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Contact Support
+              </a>
+            </div>
+
+            <p class="success-message" id="success-message" role="status" aria-live="polite">
+              Registration submitted successfully! Your payment screenshot has been uploaded and will be verified shortly.
+            </p>
+          </form>
+        </section>
+
+        <aside class="form-panel reveal" data-delay="300">
+          <div class="section-heading">
+            <p class="section-kicker">Quick Notes</p>
+            <h2>Before You Submit</h2>
+          </div>
+
+          <div class="info-list">
+            <div class="note-box">
+              <h3>Upload your screenshot</h3>
+              <p>Attach your payment screenshot directly in the form for faster verification.</p>
+            </div>
+            <div class="note-box">
+              <h3>WhatsApp confirmation</h3>
+              <p>Access details and final confirmation are sent through WhatsApp after payment review.</p>
+            </div>
+            <div class="note-box">
+              <h3>Keep it simple</h3>
+              <p>Pay, upload screenshot, submit form, and wait for your ChessHub tournament access message.</p>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const revealElements = document.querySelectorAll(".reveal");
+    const form = document.getElementById("registration-form");
+    const successMessage = document.getElementById("success-message");
+    const apiUrl = window.location.protocol.startsWith("http")
+      ? "/api/register"
+      : "http://127.0.0.1:8001/api/register";
+    console.log("Registration API URL:", apiUrl);
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      revealElements.forEach((element) => {
+        element.classList.add("is-visible");
+      });
+    } else {
+      const revealObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+              return;
+            }
+
+            const delay = entry.target.dataset.delay ?? "0";
+            entry.target.style.setProperty("--reveal-delay", `${delay}ms`);
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.16,
+          rootMargin: "0px 0px -8% 0px",
+        }
+      );
+
+      revealElements.forEach((element) => {
+        revealObserver.observe(element);
+      });
+    }
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const submitButton = form.querySelector('button[type="submit"]');
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+      delete payload.screenshot;
+
+      successMessage.classList.remove("is-error");
+      successMessage.classList.remove("is-visible");
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
+      }
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const rawResponse = await response.text();
+        let result;
+
+        try {
+          result = JSON.parse(rawResponse);
+        } catch (parseError) {
+          throw new Error("Backend did not return JSON. Open this page from port 8001 or make sure the backend is running.");
+        }
+
+        if (!response.ok) {
+          throw new Error(result.error || "Submission failed");
+        }
+
+        successMessage.textContent = "Registration saved successfully. Send your payment screenshot on WhatsApp to complete verification.";
+        successMessage.classList.add("is-visible");
+        form.reset();
+      } catch (error) {
+        successMessage.textContent = error.message || "Could not save registration. Please try again.";
+        successMessage.classList.add("is-error");
+        successMessage.classList.add("is-visible");
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = "Submit Registration";
+        }
+      }
+    });
+  </script>
+</body>
+</html>
