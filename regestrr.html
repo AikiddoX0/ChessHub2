@@ -609,86 +609,95 @@
       </section>
     </main>
   </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const revealElements = document.querySelectorAll(".reveal");
-  const form = document.getElementById("registration-form");
-  const successMessage = document.getElementById("success-message");
 
-  const SUPABASE_URL = "https://suxxzlbnlhqxnhosrwrl.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1eHh6bGJubGhxeG5ob3Nyd3JsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNDU2MDksImV4cCI6MjA5MTkyMTYwOX0.UzS9qxsDFPq0lCG3Y7EP9XM5IKjmOlu5_5SQiV110_0";
+  <script>
+    const revealElements = document.querySelectorAll(".reveal");
+    const form = document.getElementById("registration-form");
+    const successMessage = document.getElementById("success-message");
+    const apiUrl = "/register.php";
+    console.log("Registration API URL:", apiUrl);
 
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      revealElements.forEach((element) => {
+        element.classList.add("is-visible");
+      });
+    } else {
+      const revealObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+              return;
+            }
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    revealElements.forEach((element) => {
-      element.classList.add("is-visible");
-    });
-  } else {
-    const revealObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
+            const delay = entry.target.dataset.delay ?? "0";
+            entry.target.style.setProperty("--reveal-delay", `${delay}ms`);
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.16,
+          rootMargin: "0px 0px -8% 0px",
+        }
+      );
 
-          const delay = entry.target.dataset.delay ?? "0";
-          entry.target.style.setProperty("--reveal-delay", `${delay}ms`);
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        });
-      },
-      {
-        threshold: 0.16,
-        rootMargin: "0px 0px -8% 0px",
-      }
-    );
-
-    revealElements.forEach((element) => {
-      revealObserver.observe(element);
-    });
-  }
-
-  form?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const submitButton = form.querySelector('button[type="submit"]');
-    successMessage.classList.remove("is-error", "is-visible");
-
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.textContent = "Submitting...";
+      revealElements.forEach((element) => {
+        revealObserver.observe(element);
+      });
     }
 
-    const payload = {
-      full_name: form.full_name.value.trim(),
-      whatsapp: form.whatsapp.value.trim(),
-      username: form.username.value.trim(),
-      payment_id: form.payment_id.value.trim(),
-      note: form.note.value.trim(),
-      submitted_at: new Date().toISOString()
-    };
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-    try {
-      const { error } = await supabaseClient
-        .from("registrations")
-        .insert([payload]);
+      const submitButton = form.querySelector('button[type="submit"]');
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+      delete payload.screenshot;
 
-      if (error) {
-        throw error;
-      }
+      successMessage.classList.remove("is-error");
+      successMessage.classList.remove("is-visible");
 
-      successMessage.textContent = "Registration submitted successfully.";
-      successMessage.classList.add("is-visible");
-      form.reset();
-    } catch (error) {
-      successMessage.textContent = error.message || "Could not save registration.";
-      successMessage.classList.add("is-error", "is-visible");
-    } finally {
       if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = "Submit Registration";
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
       }
-    }
-  });
-</script>
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const rawResponse = await response.text();
+        let result;
+
+        try {
+          result = JSON.parse(rawResponse);
+        } catch (parseError) {
+          throw new Error("Backend did not return JSON. Open this page from port 8001 or make sure the backend is running.");
+        }
+
+        if (!response.ok) {
+          throw new Error(result.error || "Submission failed");
+        }
+
+        successMessage.textContent = "Registration saved successfully. Send your payment screenshot on WhatsApp to complete verification.";
+        successMessage.classList.add("is-visible");
+        form.reset();
+      } catch (error) {
+        successMessage.textContent = error.message || "Could not save registration. Please try again.";
+        successMessage.classList.add("is-error");
+        successMessage.classList.add("is-visible");
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = "Submit Registration";
+        }
+      }
+    });
+  </script>
 </body>
 </html>
