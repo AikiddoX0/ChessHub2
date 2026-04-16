@@ -583,7 +583,49 @@
               Registration submitted successfully! Your payment screenshot has been uploaded and will be verified shortly.
             </p>
           </form>
-          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1eHh6bGJubGhxeG5ob3Nyd3JsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNDU2MDksImV4cCI6MjA5MTkyMTYwOX0.UzS9qxsDFPq0lCG3Y7EP9XM5IKjmOlu5_5SQiV110_0
+    <script type="module">
+      import { createClient } from "https://esm.sh/@supabase/supabase-js";
+
+      const SUPABASE_URL = "https://suxxzlbnlhqxnhosrwrl.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1eHh6bGJubGhxeG5ob3Nyd3JsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNDU2MDksImV4cCI6MjA5MTkyMTYwOX0.UzS9qxsDFPq0lCG3Y7EP9XM5IKjmOlu5_5SQiV110_0";
+
+      const supabase = createClient( SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      async function register(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const username = document.getElementById("username").value;
+
+        // 1) Create Auth user
+        const { data: userData, error: signUpError } =
+          await supabase.auth.signUp({ email, password });
+
+        if (signUpError) {
+          alert(signUpError.message);
+          return;
+        }
+
+        // If email confirmation is enabled, userData.user may still be created,
+        // but login might require confirmation.
+        const userId = userData.user.id;
+
+        // 2) Insert user row into table (profiles)
+        const { error: insertError } = await supabase
+          .from("profiles")
+          .insert({ id: userId, username });
+
+        if (insertError) {
+          alert(insertError.message);
+          return;
+        }
+
+        alert("Registered! If email confirmation is ON, check your email.");
+      }
+
+      document.getElementById("register-form").addEventListener("submit", register);
+    </script>
         </section>
 
         <aside class="form-panel reveal" data-delay="300">
